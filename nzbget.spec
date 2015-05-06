@@ -1,12 +1,12 @@
-Summary:	Binary newsgrabber.
-Summary(pl.UTF-8):	-
+# TODO: package daemon
+Summary:	Binary newsgrabber
 Name:		nzbget
-Version:	0.5.1
-Release:	0.1
+Version:	14.2
+Release:	1
 License:	GPL v2
 Group:		Applications
-Source0:	http://dl.sourceforge.net/nzbget/%{name}-%{version}.tar.gz
-# Source0-md5:	3ff7cb297bbe0fd3aa378343849d85f1
+Source0:	http://downloads.sourceforge.net/nzbget/%{name}-%{version}.tar.gz
+# Source0-md5:	ade72ca57483a880e1987897a0e4063d
 URL:		http://nzbget.sourceforge.net/
 BuildRequires:	gnutls-devel
 BuildRequires:	libpar2-devel
@@ -30,8 +30,6 @@ Standalone-tool, server and client are all contained in only one
 executable file "nzbget". The mode in which the program works depends
 on command-line parameters passed to the program.
 
-%description -l pl.UTF-8
-
 %prep
 %setup -q
 
@@ -41,14 +39,18 @@ on command-line parameters passed to the program.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/
 
-%{__make} install \
+%{__make} install  \
 	DESTDIR=$RPM_BUILD_ROOT
+
+cp -p nzbget.conf $RPM_BUILD_ROOT%{_sysconfdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README nzbget.conf.example
-%attr(755,root,root) %{_bindir}/*
+%doc AUTHORS ChangeLog NEWS README
+%attr(755,root,root) %{_bindir}/nzbget
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nzbget.conf
